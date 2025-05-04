@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto bg-white p-10 rounded-xl shadow-lg border border-gray-200">
+    <h2 class="text-3xl font-extrabold mb-6 text-center text-blue-700">Analysis Results for</h2>
+    <p class="text-center text-blue-600 text-lg font-semibold mb-8 break-words">{{ url }}</p>
+
+    <div class="mb-8 text-center">
+        <p class="text-xl font-semibold">
+            Legitimacy: 
+            {% if analysis.legitimacy == 'Unsafe' %}
+                <span class="text-red-600">{{ analysis.legitimacy }}</span>
+            {% elif analysis.legitimacy == 'Suspicious' %}
+                <span class="text-yellow-600">{{ analysis.legitimacy }}</span>
+            {% else %}
+                <span class="text-green-600">{{ analysis.legitimacy }}</span>
+            {% endif %}
+        </p>
+        <p class="text-lg mt-2">Risk Score: <span class="font-bold">{{ analysis.risk_score }} / 100</span></p>
+        <p class="mt-4 text-gray-700">{{ analysis.recommendation }}</p>
+    </div>
+
+    <div class="mb-8">
+        <h3 class="text-xl font-semibold mb-4">Details:</h3>
+        <ul class="list-disc list-inside space-y-2 text-gray-700">
+            {% for key, value in analysis.details.items() %}
+                <li>
+                    <strong>{{ key.replace('_', ' ').title() }}:</strong>
+                    {% if value is mapping %}
+                        <ul class="list-disc list-inside ml-6 space-y-1">
+                            {% for subkey, subval in value.items() %}
+                                <li>{{ subkey.replace('_', ' ').title() }}: {{ subval }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        {{ value }}
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="text-center">
+        <a href="{{ url_for('index') }}" class="inline-block bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-indigo-700 transition shadow-lg">
+            Analyze Another URL
+        </a>
+    </div>
+</div>
+{% endblock %}
