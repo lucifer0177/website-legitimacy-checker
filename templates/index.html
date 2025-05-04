@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-xl mx-auto bg-white p-10 rounded-xl shadow-lg border border-gray-200">
+    <h2 class="text-3xl font-extrabold mb-6 text-center text-blue-700">Check Website Legitimacy & Risk</h2>
+    <p class="text-center text-gray-600 mb-8">Enter a website URL below to get a detailed analysis of its safety and legitimacy.</p>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="mb-6">
+          {% for category, message in messages %}
+            <div class="p-4 rounded {{ 'bg-red-100 text-red-700' if category == 'error' else 'bg-green-100 text-green-700' }} shadow-sm">
+              {{ message }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    <form id="urlForm" action="{{ url_for('analyze') }}" method="POST" class="space-y-6">
+        <input
+            type="url"
+            name="url"
+            id="urlInput"
+            placeholder="https://example.com"
+            required
+            class="w-full px-5 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-300 transition"
+            aria-label="Website URL"
+        />
+        <button
+            type="submit"
+            class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-indigo-700 transition shadow-lg"
+        >
+            Analyze Website
+        </button>
+    </form>
+    <div class="mt-10 text-center text-sm text-gray-500">
+        Powered by <a href="https://developers.google.com/safe-browsing" target="_blank" class="text-blue-600 hover:underline">Google Safe Browsing</a> and <a href="https://www.virustotal.com" target="_blank" class="text-blue-600 hover:underline">VirusTotal</a>
+    </div>
+</div>
+{% endblock %}
